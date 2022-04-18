@@ -672,6 +672,25 @@ define Device/gnubee_gb-pc2
 endef
 TARGET_DEVICES += gnubee_gb-pc2
 
+define Device/h3c_tx1801-plus
+  $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  UBINIZE_OPTS := -E 5
+  KERNEL_SIZE := 4096k
+  IMAGE_SIZE := 128512k
+  IMAGES += factory.bin
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | \
+	check-size
+  DEVICE_VENDOR := H3C
+  DEVICE_MODEL := Tx1801-Plus
+  DEVICE_PACKAGES += kmod-mt7915e wpad-openssl uboot-envtools
+  SUPPORTED_DEVICES += h3c,tx1801-plus
+endef
+TARGET_DEVICES += h3c_tx1801-plus
+
 define Device/hilink_hlk-7621a
   IMAGE_SIZE := 32448k
   DEVICE_VENDOR := HiLink
